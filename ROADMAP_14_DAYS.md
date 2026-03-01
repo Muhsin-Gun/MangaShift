@@ -56,8 +56,3 @@
 - Freeze release candidate
 - Docker build/publish dry run
 - Package extension for Chrome/Firefox submission prep
-A) Local desktop software
-B) Web SaaS platform
-C) Chrome extension (backend cloud AI)
-D) Studio production internal tool
-E) Hybrid desktop + cloud
