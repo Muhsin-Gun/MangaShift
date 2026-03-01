@@ -19,7 +19,7 @@
 ## Day 5
 - Inpainting artifact pass
 - Tighten mask generation and cleanup heuristics
-
+hu
 ## Day 6
 - Upscaler benchmark pass (PIL fallback vs Real-ESRGAN path)
 - Tune default scale/profile by image quality score
