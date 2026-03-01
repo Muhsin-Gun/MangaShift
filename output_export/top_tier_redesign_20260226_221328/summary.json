@@ -1,0 +1,417 @@
+{
+  "generated_at": "2026-02-26T22:13:28.152016",
+  "quality": "preview",
+  "styles": [
+    "chibi_cute",
+    "cinematic_filmic",
+    "dark_fantasy",
+    "hybrid_3d_cel",
+    "ink_art",
+    "manager_drama",
+    "manga_classic",
+    "noir_contrast",
+    "original",
+    "painterly_fantasy",
+    "painterly_realism",
+    "painterly_watercolor",
+    "pastel_soft_glow",
+    "realistic",
+    "retro_90s",
+    "seinen_gritty",
+    "shonen_action",
+    "shoujo_soft",
+    "sketch",
+    "smooth",
+    "ultra_realistic",
+    "webtoon_smooth"
+  ],
+  "panels": [
+    {
+      "name": "panel_01_eyes",
+      "source_path": "C:\\Users\\amadn\\OneDrive\\Pictures\\Screenshots\\Screenshot 2026-02-26 120051.png",
+      "crop_box": [
+        520,
+        140,
+        1080,
+        1110
+      ],
+      "input_crop": "output_export\\top_tier_redesign_20260226_221328\\inputs\\panel_01_eyes_input_crop.png",
+      "outputs": [
+        {
+          "style": "original_input",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\00_original_preview.png",
+          "backend": "input"
+        },
+        {
+          "style": "chibi_cute",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\01_chibi_cute_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "cinematic_filmic",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\02_cinematic_filmic_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "dark_fantasy",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\03_dark_fantasy_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "hybrid_3d_cel",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\04_hybrid_3d_cel_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "ink_art",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\05_ink_art_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "manager_drama",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\06_manager_drama_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "manga_classic",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\07_manga_classic_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "noir_contrast",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\08_noir_contrast_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "original",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\09_original_preview.png",
+          "backend": "fallback_filter"
+        },
+        {
+          "style": "painterly_fantasy",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\10_painterly_fantasy_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "painterly_realism",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\11_painterly_realism_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "painterly_watercolor",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\12_painterly_watercolor_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "pastel_soft_glow",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\13_pastel_soft_glow_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "realistic",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\14_realistic_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "retro_90s",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\15_retro_90s_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "seinen_gritty",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\16_seinen_gritty_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "shonen_action",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\17_shonen_action_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "shoujo_soft",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\18_shoujo_soft_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "sketch",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\19_sketch_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "smooth",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\20_smooth_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "ultra_realistic",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\21_ultra_realistic_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "webtoon_smooth",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes\\22_webtoon_smooth_preview.png",
+          "backend": "diffusion_img2img"
+        }
+      ],
+      "grid": "output_export\\top_tier_redesign_20260226_221328\\panel_01_eyes_style_grid.png"
+    },
+    {
+      "name": "panel_02_oldman",
+      "source_path": "C:\\Users\\amadn\\OneDrive\\Pictures\\Screenshots\\Screenshot 2026-02-26 115905.png",
+      "crop_box": [
+        460,
+        120,
+        1260,
+        1110
+      ],
+      "input_crop": "output_export\\top_tier_redesign_20260226_221328\\inputs\\panel_02_oldman_input_crop.png",
+      "outputs": [
+        {
+          "style": "original_input",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\00_original_preview.png",
+          "backend": "input"
+        },
+        {
+          "style": "chibi_cute",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\01_chibi_cute_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "cinematic_filmic",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\02_cinematic_filmic_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "dark_fantasy",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\03_dark_fantasy_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "hybrid_3d_cel",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\04_hybrid_3d_cel_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "ink_art",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\05_ink_art_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "manager_drama",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\06_manager_drama_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "manga_classic",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\07_manga_classic_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "noir_contrast",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\08_noir_contrast_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "original",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\09_original_preview.png",
+          "backend": "fallback_filter"
+        },
+        {
+          "style": "painterly_fantasy",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\10_painterly_fantasy_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "painterly_realism",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\11_painterly_realism_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "painterly_watercolor",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\12_painterly_watercolor_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "pastel_soft_glow",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\13_pastel_soft_glow_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "realistic",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\14_realistic_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "retro_90s",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\15_retro_90s_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "seinen_gritty",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\16_seinen_gritty_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "shonen_action",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\17_shonen_action_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "shoujo_soft",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\18_shoujo_soft_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "sketch",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\19_sketch_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "smooth",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\20_smooth_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "ultra_realistic",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\21_ultra_realistic_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "webtoon_smooth",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman\\22_webtoon_smooth_preview.png",
+          "backend": "diffusion_img2img"
+        }
+      ],
+      "grid": "output_export\\top_tier_redesign_20260226_221328\\panel_02_oldman_style_grid.png"
+    },
+    {
+      "name": "panel_03_shadowhand",
+      "source_path": "C:\\Users\\amadn\\OneDrive\\Pictures\\Screenshots\\Screenshot 2026-02-25 150804.png",
+      "crop_box": [
+        610,
+        120,
+        1260,
+        1110
+      ],
+      "input_crop": "output_export\\top_tier_redesign_20260226_221328\\inputs\\panel_03_shadowhand_input_crop.png",
+      "outputs": [
+        {
+          "style": "original_input",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\00_original_preview.png",
+          "backend": "input"
+        },
+        {
+          "style": "chibi_cute",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\01_chibi_cute_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "cinematic_filmic",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\02_cinematic_filmic_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "dark_fantasy",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\03_dark_fantasy_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "hybrid_3d_cel",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\04_hybrid_3d_cel_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "ink_art",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\05_ink_art_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "manager_drama",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\06_manager_drama_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "manga_classic",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\07_manga_classic_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "noir_contrast",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\08_noir_contrast_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "original",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\09_original_preview.png",
+          "backend": "fallback_filter"
+        },
+        {
+          "style": "painterly_fantasy",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\10_painterly_fantasy_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "painterly_realism",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\11_painterly_realism_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "painterly_watercolor",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\12_painterly_watercolor_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "pastel_soft_glow",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\13_pastel_soft_glow_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "realistic",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\14_realistic_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "retro_90s",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\15_retro_90s_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "seinen_gritty",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\16_seinen_gritty_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "shonen_action",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\17_shonen_action_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "shoujo_soft",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\18_shoujo_soft_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "sketch",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\19_sketch_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "smooth",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\20_smooth_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "ultra_realistic",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\21_ultra_realistic_preview.png",
+          "backend": "diffusion_img2img"
+        },
+        {
+          "style": "webtoon_smooth",
+          "path": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand\\22_webtoon_smooth_preview.png",
+          "backend": "diffusion_img2img"
+        }
+      ],
+      "grid": "output_export\\top_tier_redesign_20260226_221328\\panel_03_shadowhand_style_grid.png"
+    }
+  ]
+}

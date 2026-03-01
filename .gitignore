@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtualenv
+.venv/
+venv/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Runtime assets
+backend/cache/
+backend/models/
+backend/loras/*.safetensors
+backend/fonts/*.ttf
+
+# Extension
+extension/node_modules/

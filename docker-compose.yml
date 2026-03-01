@@ -1,0 +1,19 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./backend/models:/app/models
+      - ./backend/cache:/app/cache
+      - ./backend/fonts:/app/fonts
+      - ./backend/loras:/app/loras
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]

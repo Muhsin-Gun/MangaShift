@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "MangaShift AI",
+  "version": "1.0.0",
+  "description": "Real-time manga/manhwa translation and art enhancement on your browser.",
+  "permissions": ["activeTab", "scripting", "storage", "tabs"],
+  "host_permissions": ["<all_urls>", "http://127.0.0.1:8000/*"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentScript.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

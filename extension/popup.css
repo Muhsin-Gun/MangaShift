@@ -1,0 +1,137 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  width: 360px;
+  background: linear-gradient(165deg, #0f172a, #1e293b 55%, #2d1b3d);
+  color: #f8fafc;
+  font: 13px/1.4 "Segoe UI", "Noto Sans", sans-serif;
+}
+
+.wrap {
+  padding: 12px;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.top h1 {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: 0.2px;
+}
+
+.badge {
+  font-size: 11px;
+  border-radius: 999px;
+  padding: 4px 8px;
+}
+
+.badge.pending {
+  background: rgba(148, 163, 184, 0.2);
+}
+
+.badge.ok {
+  background: rgba(16, 185, 129, 0.2);
+}
+
+.badge.error {
+  background: rgba(239, 68, 68, 0.25);
+}
+
+.group {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.group h2 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+select,
+input[type="range"] {
+  width: 100%;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.style-card {
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  border-radius: 8px;
+  background: rgba(30, 41, 59, 0.9);
+  color: #f8fafc;
+  padding: 6px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.style-card.selected {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 1px #38bdf8 inset;
+}
+
+.style-card img {
+  width: 100%;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.style-card .name {
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.style-card .hint {
+  font-size: 10px;
+  opacity: 0.85;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+button {
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  background: rgba(30, 41, 59, 0.8);
+  color: #f8fafc;
+}
+
+button.primary {
+  background: linear-gradient(135deg, #0ea5e9, #2563eb);
+  border-color: rgba(191, 219, 254, 0.5);
+}

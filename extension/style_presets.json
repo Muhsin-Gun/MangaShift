@@ -1,0 +1,38 @@
+[
+  {
+    "id": "smooth",
+    "name": "Smooth Anime",
+    "prompt_hint": "Clean cel shading, soft gradients, polished anime lines.",
+    "thumbnail_path": "assets/smooth.svg"
+  },
+  {
+    "id": "shonen",
+    "name": "Shonen Action",
+    "prompt_hint": "Bold contrast, energetic highlights, action-first dramatic framing.",
+    "thumbnail_path": "assets/shonen.svg"
+  },
+  {
+    "id": "shoujo",
+    "name": "Shoujo Soft",
+    "prompt_hint": "Pastel palette, delicate outlines, emotional softness.",
+    "thumbnail_path": "assets/shoujo.svg"
+  },
+  {
+    "id": "realistic",
+    "name": "Realistic",
+    "prompt_hint": "Textured lighting, cinematic detail, natural skin and surfaces.",
+    "thumbnail_path": "assets/realistic.svg"
+  },
+  {
+    "id": "gritty",
+    "name": "Gritty",
+    "prompt_hint": "Heavy contrast, rough textures, darker comic mood.",
+    "thumbnail_path": "assets/gritty.svg"
+  },
+  {
+    "id": "painterly",
+    "name": "Painterly",
+    "prompt_hint": "Brush-texture look with rich color blending.",
+    "thumbnail_path": "assets/painterly.svg"
+  }
+]

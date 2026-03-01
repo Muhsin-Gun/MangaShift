@@ -1,0 +1,13 @@
+{
+  "name": "mangashift-extension",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint --max-warnings=0 background.js contentScript.js popup.js"
+  },
+  "devDependencies": {
+    "eslint": "^9.29.0",
+    "@eslint/js": "^9.29.0"
+  }
+}

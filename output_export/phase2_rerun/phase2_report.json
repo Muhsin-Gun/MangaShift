@@ -1,0 +1,101 @@
+[
+  {
+    "panel": "dark",
+    "style": "original",
+    "status": 504,
+    "cache_hit": null,
+    "error": {
+      "detail": "Image processing timed out"
+    }
+  },
+  {
+    "panel": "dark",
+    "style": "cinematic",
+    "status": 504,
+    "cache_hit": null,
+    "error": {
+      "detail": "Image processing timed out"
+    }
+  },
+  {
+    "panel": "dark",
+    "style": "realistic",
+    "status": 504,
+    "cache_hit": null,
+    "error": {
+      "detail": "Image processing timed out"
+    }
+  },
+  {
+    "panel": "dark",
+    "style": "painterly",
+    "status": 504,
+    "cache_hit": null,
+    "error": {
+      "detail": "Image processing timed out"
+    }
+  },
+  {
+    "panel": "dark",
+    "style": "dark_fantasy",
+    "status": 504,
+    "cache_hit": null,
+    "error": {
+      "detail": "Image processing timed out"
+    }
+  },
+  {
+    "panel": "action",
+    "style": "original",
+    "status": 504,
+    "cache_hit": null,
+    "error": {
+      "detail": "Image processing timed out"
+    }
+  },
+  {
+    "panel": "action",
+    "style": "smooth",
+    "status": 504,
+    "cache_hit": null,
+    "error": {
+      "detail": "Image processing timed out"
+    }
+  },
+  {
+    "panel": "action",
+    "style": "cinematic",
+    "status": 504,
+    "cache_hit": null,
+    "error": {
+      "detail": "Image processing timed out"
+    }
+  },
+  {
+    "panel": "action",
+    "style": "realistic",
+    "status": 504,
+    "cache_hit": null,
+    "error": {
+      "detail": "Image processing timed out"
+    }
+  },
+  {
+    "panel": "action",
+    "style": "painterly",
+    "status": 504,
+    "cache_hit": null,
+    "error": {
+      "detail": "Image processing timed out"
+    }
+  },
+  {
+    "panel": "action",
+    "style": "gritty",
+    "status": 504,
+    "cache_hit": null,
+    "error": {
+      "detail": "Image processing timed out"
+    }
+  }
+]
