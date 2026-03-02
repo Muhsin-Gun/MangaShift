@@ -159,4 +159,4 @@ Optional:
 
 - Dependency checks (`pip check`) are run in bootstrap/start scripts as advisory diagnostics.
 - Real-ESRGAN runs only when both package imports and model weights are available.
-- There is no `oldman.py` entrypoint; use `backend/scripts/run_oldman_master.py`.
+- There is no `oldman.py` entrypoint; use `backend/scripts/run_oldman_master.py`
