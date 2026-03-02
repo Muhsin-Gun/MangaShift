@@ -2,7 +2,11 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-VENV_DIR="${ROOT_DIR}/.venv_pro"
+if [ -d "${ROOT_DIR}/.venv_cuda" ]; then
+  VENV_DIR="${ROOT_DIR}/.venv_cuda"
+else
+  VENV_DIR="${ROOT_DIR}/.venv_pro"
+fi
 
 echo "[MangaShift] Pro bootstrap root: ${ROOT_DIR}"
 
@@ -19,6 +23,9 @@ python -m pip install --upgrade pip setuptools wheel
 echo "[MangaShift] Installing base requirements"
 python -m pip install -r "${ROOT_DIR}/requirements.txt"
 python -m pip install facenet-pytorch --no-deps
+
+echo "[MangaShift] Dependency integrity check (advisory)"
+python -m pip check || echo "[MangaShift] WARNING: pip check reported advisory conflicts; strict runtime gates still apply."
 
 echo "[MangaShift] Installing/repairing strict-mode stack"
 python "${ROOT_DIR}/scripts/verify_pro_stack.py" --install-missing

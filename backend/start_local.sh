@@ -26,6 +26,9 @@ echo "[MangaShift] Installing Python dependencies"
 python -m pip install -r "${ROOT_DIR}/requirements.txt"
 python -m pip install facenet-pytorch --no-deps
 
+echo "[MangaShift] Dependency integrity check (advisory)"
+python -m pip check || echo "[MangaShift] WARNING: pip check reported advisory conflicts. Continuing startup."
+
 mkdir -p "${MODELS_DIR}"
 mkdir -p "${ROOT_DIR}/cache"
 

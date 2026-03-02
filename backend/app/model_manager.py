@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib
 import importlib.util
 import os
 import threading
@@ -92,7 +93,16 @@ class ModelManager:
     def module_available(self, module_name: str) -> bool:
         if module_name in self._capability_cache:
             return self._capability_cache[module_name]
-        available = importlib.util.find_spec(module_name) is not None
+        spec = importlib.util.find_spec(module_name)
+        available = spec is not None
+        # Some modules are importable by spec but fail at runtime because of
+        # transitive dependency mismatches (for example, realesrgan -> basicsr -> torchvision).
+        # Probe-import these modules once to prevent false capability positives.
+        if available and module_name in {"realesrgan", "facenet_pytorch"}:
+            try:
+                importlib.import_module(module_name)
+            except Exception:
+                available = False
         self._capability_cache[module_name] = available
         return available
 

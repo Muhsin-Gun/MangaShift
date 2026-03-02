@@ -111,6 +111,7 @@ def parse_args() -> argparse.Namespace:
         help="Enable pre-style colorization pass (recommended for sketch/gray inputs).",
     )
     parser.add_argument("--source-lang", type=str, default="auto", choices=["auto", "ja", "ko"])
+    parser.add_argument("--page-index", type=int, default=2)
     parser.add_argument("--pose-ref", type=Path, default=None)
     parser.add_argument("--style-ref", type=Path, default=None)
     parser.add_argument("--character-ref", type=Path, default=None)
@@ -193,7 +194,7 @@ def main() -> None:
         "render_quality": args.render_quality,
         "series_id": "oldman_master_series",
         "chapter_id": "oldman_master_chapter",
-        "page_index": "2",
+        "page_index": str(max(0, int(args.page_index))),
         "enforce_identity": "true",
         "shot_type": args.shot_type,
         "variant_count": str(max(1, min(32, int(args.variant_count)))),

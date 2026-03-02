@@ -29,6 +29,12 @@ Write-Host "[MangaShift] Installing dependencies"
 python -m pip install -r (Join-Path $Root "requirements.txt")
 python -m pip install facenet-pytorch --no-deps
 
+Write-Host "[MangaShift] Dependency integrity check (advisory)"
+python -m pip check
+if ($LASTEXITCODE -ne 0) {
+    Write-Warning "[MangaShift] pip check reported advisory conflicts. Continuing startup."
+}
+
 Write-Host "[MangaShift] Torch/CUDA probe"
 @'
 import sys

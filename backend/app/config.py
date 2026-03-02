@@ -41,6 +41,9 @@ class Settings(BaseSettings):
 
     sd_inpaint_model: str = "runwayml/stable-diffusion-inpainting"
     sd_img2img_model: str = "runwayml/stable-diffusion-v1-5"
+    realesrgan_model_path: Path = Field(
+        default=Path(__file__).resolve().parents[1] / "models" / "realesrgan" / "RealESRGAN_x4plus.pth"
+    )
     quality_sdxl_model: str = "stabilityai/stable-diffusion-xl-base-1.0"
     controlnet_canny_model: str = "lllyasviel/sd-controlnet-canny"
     controlnet_depth_model: str = "lllyasviel/sd-controlnet-depth"

@@ -23,6 +23,12 @@ MODEL_MAP: Dict[str, str] = {
     "sd_inpaint": "runwayml/stable-diffusion-inpainting",
     "controlnet_canny": "lllyasviel/sd-controlnet-canny",
     "controlnet_depth": "lllyasviel/sd-controlnet-depth",
+    "quality_sdxl": "stabilityai/stable-diffusion-xl-base-1.0",
+    "quality_controlnet_canny": "diffusers/controlnet-canny-sdxl-1.0",
+    "quality_controlnet_depth": "diffusers/controlnet-depth-sdxl-1.0",
+    "quality_controlnet_openpose": "thibaud/controlnet-openpose-sdxl-1.0",
+    "ip_adapter_sd15": "h94/IP-Adapter",
+    "ip_adapter_sdxl": "h94/IP-Adapter",
     "lama": "Sanster/LaMa",
 }
 
@@ -35,6 +41,15 @@ REQUIRED_CORE_KEYS = [
     "sd_inpaint",
 ]
 
+QUALITY_CORE_KEYS = [
+    "quality_sdxl",
+    "quality_controlnet_canny",
+    "quality_controlnet_depth",
+    "quality_controlnet_openpose",
+    "ip_adapter_sd15",
+    "ip_adapter_sdxl",
+]
+
 MODEL_ALLOW_PATTERNS = {
     "manga_ocr": ["*.json", "*.model", "*.bin", "*.safetensors", "*.txt"],
     "marian_ja_en": ["*.json", "*.bin", "*.model", "*.txt", "*.vocab", "*.spm", "*.safetensors"],
@@ -44,6 +59,12 @@ MODEL_ALLOW_PATTERNS = {
     "sd_inpaint": ["*.json", "*.bin", "*.safetensors", "*.txt", "*.model", "*.md", "*.yaml"],
     "controlnet_canny": ["*.json", "*.bin", "*.safetensors", "*.txt", "*.yaml", "*.md"],
     "controlnet_depth": ["*.json", "*.bin", "*.safetensors", "*.txt", "*.yaml", "*.md"],
+    "quality_sdxl": ["*.json", "*.bin", "*.safetensors", "*.txt", "*.model", "*.md", "*.yaml"],
+    "quality_controlnet_canny": ["*.json", "*.bin", "*.safetensors", "*.txt", "*.yaml", "*.md"],
+    "quality_controlnet_depth": ["*.json", "*.bin", "*.safetensors", "*.txt", "*.yaml", "*.md"],
+    "quality_controlnet_openpose": ["*.json", "*.bin", "*.safetensors", "*.txt", "*.yaml", "*.md"],
+    "ip_adapter_sd15": ["models/ip-adapter_sd15.safetensors", "models/image_encoder/*", "models/*.json"],
+    "ip_adapter_sdxl": ["sdxl_models/ip-adapter_sdxl_vit-h.safetensors", "sdxl_models/image_encoder/*", "sdxl_models/*.json"],
     "lama": ["*.json", "*.bin", "*.pth", "*.yaml", "*.txt", "*.md"],
 }
 
@@ -94,11 +115,24 @@ def _download_single(
 
 
 def _resolve_keys(args: argparse.Namespace) -> List[str]:
+    if args.only:
+        return list(args.only)
+    keys: List[str] = []
     if args.required:
-        return list(REQUIRED_CORE_KEYS)
-    if args.all or not args.only:
-        return list(MODEL_MAP.keys())
-    return list(args.only)
+        keys.extend(REQUIRED_CORE_KEYS)
+    if args.quality:
+        keys.extend(QUALITY_CORE_KEYS)
+    if args.all or not keys:
+        keys.extend(MODEL_MAP.keys())
+    # Keep order stable while de-duplicating.
+    seen = set()
+    resolved: List[str] = []
+    for key in keys:
+        if key in seen:
+            continue
+        seen.add(key)
+        resolved.append(key)
+    return resolved
 
 
 def main() -> None:
@@ -111,6 +145,7 @@ def main() -> None:
     )
     parser.add_argument("--all", action="store_true", help="Download all known models.")
     parser.add_argument("--required", action="store_true", help="Download strict core models only.")
+    parser.add_argument("--quality", action="store_true", help="Download quality/full-path SDXL + ControlNet + IP-Adapter assets.")
     parser.add_argument("--only", nargs="*", default=[], help=f"Subset keys: {', '.join(MODEL_MAP.keys())}")
     parser.add_argument("--force", action="store_true", help="Redownload even when files already exist.")
     parser.add_argument(

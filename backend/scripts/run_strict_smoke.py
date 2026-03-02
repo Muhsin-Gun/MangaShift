@@ -3,6 +3,8 @@ from __future__ import annotations
 import argparse
 import io
 import json
+import os
+import subprocess
 import sys
 import time
 from contextlib import contextmanager
@@ -16,7 +18,36 @@ BACKEND_DIR = ROOT / "backend"
 if str(BACKEND_DIR) not in sys.path:
     sys.path.insert(0, str(BACKEND_DIR))
 
-from app.main import app, settings  # noqa: E402
+app = None
+settings = None
+
+
+def maybe_reexec_cuda_venv() -> None:
+    if os.environ.get("MANGASHIFT_REEXEC_DONE") == "1":
+        return
+    if os.environ.get("MANGASHIFT_DISABLE_AUTO_PYTHON") == "1":
+        return
+
+    if os.name == "nt":
+        candidate = ROOT / "backend" / ".venv_cuda" / "Scripts" / "python.exe"
+    else:
+        candidate = ROOT / "backend" / ".venv_cuda" / "bin" / "python"
+    if not candidate.exists():
+        return
+    try:
+        current = Path(sys.executable).resolve()
+        target = candidate.resolve()
+    except Exception:
+        return
+    if current == target:
+        return
+
+    if sys.version_info < (3, 13):
+        return
+    env = dict(os.environ)
+    env["MANGASHIFT_REEXEC_DONE"] = "1"
+    proc = subprocess.run([str(target), __file__, *sys.argv[1:]], env=env, check=False)
+    raise SystemExit(int(proc.returncode))
 
 
 def build_synthetic_panel(width: int = 640, height: int = 980) -> bytes:
@@ -41,6 +72,8 @@ def strict_flags(
     strict_require_ocr: bool,
     strict_require_translation_models: bool,
 ):
+    if settings is None:
+        raise RuntimeError("run_strict_smoke settings not initialized")
     keys = {
         "strict_pro_mode": strict_pro_mode,
         "strict_require_gpu": strict_require_gpu,
@@ -66,6 +99,8 @@ def run_smoke(
     colorize: bool,
     upscale: float,
 ) -> dict:
+    if app is None:
+        raise RuntimeError("run_strict_smoke app not initialized")
     client = TestClient(app)
     result: dict = {"status": "unknown", "ok": False}
 
@@ -85,6 +120,8 @@ def run_smoke(
     result["warmup"] = warmup.json() if warmup.status_code == 200 else {}
 
     files = {"file": ("smoke_panel.png", image_bytes, "image/png")}
+    if render_quality == "quality":
+        files["style_ref_file"] = ("strict_smoke_style_ref.png", image_bytes, "image/png")
     form = {
         "source_lang": source_lang,
         "target_lang": "en",
@@ -95,6 +132,8 @@ def run_smoke(
         "series_id": "strict_smoke_series",
         "chapter_id": "strict_smoke_chapter",
         "page_index": "1",
+        "shot_type": "auto",
+        "variant_count": "16" if render_quality == "quality" else "6",
     }
     started = time.perf_counter()
     process = client.post("/process-image", files=files, data=form)
@@ -123,11 +162,17 @@ def run_smoke(
 
 
 def main() -> None:
+    maybe_reexec_cuda_venv()
+    global app, settings
+    from app.main import app as loaded_app, settings as loaded_settings  # noqa: E402
+
+    app = loaded_app
+    settings = loaded_settings
     parser = argparse.ArgumentParser(description="Run strict smoke validation for MangaShift backend.")
     parser.add_argument("--input-image", type=Path, default=None, help="Optional input image for smoke run.")
     parser.add_argument("--output-dir", type=Path, default=ROOT / "backend" / "cache" / "strict_smoke")
     parser.add_argument("--style", default="cinematic")
-    parser.add_argument("--quality", default="final", choices=["preview", "balanced", "final"])
+    parser.add_argument("--quality", default="final", choices=["preview", "balanced", "final", "quality"])
     parser.add_argument("--source-lang", default="auto", choices=["auto", "ja", "ko"])
     parser.add_argument("--colorize", action="store_true")
     parser.add_argument("--upscale", type=float, default=1.5)

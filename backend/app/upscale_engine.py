@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 from functools import lru_cache
+from pathlib import Path
 
 import cv2
 import numpy as np
 from loguru import logger
 from PIL import Image, ImageFilter
 
+from .config import get_settings
 from .utils import pil_to_png_bytes, safe_image_load
 
 
@@ -17,6 +19,11 @@ def _quality_score(image: Image.Image) -> float:
 
 @lru_cache(maxsize=1)
 def _load_realesrgan_model():
+    settings = get_settings()
+    model_path = Path(settings.realesrgan_model_path)
+    if not model_path.exists():
+        logger.warning("Real-ESRGAN weights not found: {}", model_path)
+        return None
     try:
         from basicsr.archs.rrdbnet_arch import RRDBNet
         from realesrgan import RealESRGANer
@@ -24,7 +31,7 @@ def _load_realesrgan_model():
         model = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64, num_block=6, num_grow_ch=32, scale=4)
         enhancer = RealESRGANer(
             scale=4,
-            model_path=None,
+            model_path=str(model_path),
             model=model,
             tile=512,
             tile_pad=24,

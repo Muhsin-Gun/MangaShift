@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import argparse
+import importlib
 import importlib.util
 import json
+import os
 import platform
 import subprocess
 import sys
@@ -19,11 +21,11 @@ REQUIRED_CORE = [
     "diffusers",
     "controlnet_aux",
     "facenet_pytorch",
-    "realesrgan",
 ]
 
 RECOMMENDED = [
     "lama_cleaner",
+    "realesrgan",
     "xformers",
     "accelerate",
     "safetensors",
@@ -42,7 +44,45 @@ class ModuleStatus:
 def has_module(module_name: str) -> bool:
     if module_name == "opencv_python":
         module_name = "cv2"
-    return importlib.util.find_spec(module_name) is not None
+    spec = importlib.util.find_spec(module_name)
+    if spec is None:
+        return False
+    if module_name in {"realesrgan", "facenet_pytorch"}:
+        try:
+            importlib.import_module(module_name)
+        except Exception:
+            return False
+    return True
+
+
+def maybe_reexec_cuda_venv() -> None:
+    if os.environ.get("MANGASHIFT_REEXEC_DONE") == "1":
+        return
+    if os.environ.get("MANGASHIFT_DISABLE_AUTO_PYTHON") == "1":
+        return
+
+    backend_dir = Path(__file__).resolve().parents[1]
+    if os.name == "nt":
+        candidate = backend_dir / ".venv_cuda" / "Scripts" / "python.exe"
+    else:
+        candidate = backend_dir / ".venv_cuda" / "bin" / "python"
+    if not candidate.exists():
+        return
+    try:
+        current = Path(sys.executable).resolve()
+        target = candidate.resolve()
+    except Exception:
+        return
+    if current == target:
+        return
+
+    # Prefer the known-good venv when accidentally launched with global Python (often 3.13+).
+    if sys.version_info < (3, 13):
+        return
+    env = dict(os.environ)
+    env["MANGASHIFT_REEXEC_DONE"] = "1"
+    proc = subprocess.run([str(target), __file__, *sys.argv[1:]], env=env, check=False)
+    raise SystemExit(int(proc.returncode))
 
 
 def local_model_files_status() -> Dict[str, object]:
@@ -194,6 +234,7 @@ def strict_ready(status: Dict[str, object]) -> bool:
 
 
 def main() -> None:
+    maybe_reexec_cuda_venv()
     parser = argparse.ArgumentParser(description="Verify/prepare MangaShift strict production stack.")
     parser.add_argument("--install-missing", action="store_true")
     parser.add_argument("--json", action="store_true")
