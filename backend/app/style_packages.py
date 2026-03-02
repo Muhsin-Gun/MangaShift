@@ -48,7 +48,11 @@ class StylePackage:
     def normalized(self) -> "StylePackage":
         cleaned = copy.deepcopy(self)
         cleaned.id = cleaned.id.strip().lower().replace(" ", "_")
-        cleaned.priority = cleaned.priority if cleaned.priority in {"preview", "balanced", "final", "quality"} else "balanced"
+        cleaned.priority = (
+            cleaned.priority
+            if cleaned.priority in {"preview", "balanced", "final", "quality"}
+            else "balanced"
+        )
         strength = float(cleaned.img2img_params.get("strength", 0.45))
         cleaned.img2img_params["strength"] = max(0.15, min(strength, 0.8))
         steps = int(cleaned.img2img_params.get("steps", QUALITY_STEPS[cleaned.priority]))
@@ -70,7 +74,10 @@ class StylePackage:
         elif quality == "quality":
             steps = settings.quality_master_steps
             package.img2img_params["strength"] = min(max(package.img2img_params["strength"], 0.5), 0.75)
-            package.img2img_params["guidance_scale"] = min(max(package.img2img_params.get("guidance_scale", 8.5), 8.5), 12.0)
+            package.img2img_params["guidance_scale"] = min(
+                max(package.img2img_params.get("guidance_scale", 8.5), 8.5),
+                12.0,
+            )
         else:
             steps = settings.quality_balanced_steps
         package.img2img_params["steps"] = max(4, min(int(steps), 90))

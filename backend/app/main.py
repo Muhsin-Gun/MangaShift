@@ -529,7 +529,9 @@ def _run_pipeline(
         "faces_compared": preview_faces,
         "character_matches": preview_matches,
         "threshold": settings.identity_similarity_threshold,
-        "drift_detected": preview_similarity < settings.identity_similarity_threshold and preview_faces > 0,
+        "drift_detected": (
+            preview_similarity < settings.identity_similarity_threshold and preview_faces > 0
+        ),
     }
     planner_report = {
         "enabled": True,
@@ -548,13 +550,28 @@ def _run_pipeline(
         ],
         "strength_override": float(two_pass.get("best_variant", {}).get("params", {}).get("style_strength", 0.45)),
         "note": "Two-pass quality-gated planner",
+        "identity_preview": planner_identity,
         "quality_gate": quality_gate,
     }
 
     def rerender(attempt: int, identity_score: float):
-        strength = max(0.2, float(two_pass.get("best_variant", {}).get("params", {}).get("style_strength", 0.45)) - 0.05 * attempt)
-        guidance = min(12.5, float(two_pass.get("best_variant", {}).get("params", {}).get("style_guidance", 10.0)) + 0.2 * attempt)
-        steps = int(min(44, float(two_pass.get("best_variant", {}).get("params", {}).get("style_steps", 32)) + 2 * attempt))
+        strength = max(
+            0.2,
+            float(two_pass.get("best_variant", {}).get("params", {}).get("style_strength", 0.45))
+            - 0.05 * attempt,
+        )
+        guidance = min(
+            12.5,
+            float(two_pass.get("best_variant", {}).get("params", {}).get("style_guidance", 10.0))
+            + 0.2 * attempt,
+        )
+        steps = int(
+            min(
+                44,
+                float(two_pass.get("best_variant", {}).get("params", {}).get("style_steps", 32))
+                + 2 * attempt,
+            )
+        )
         try:
             return apply_style(
                 image=image,
@@ -568,7 +585,11 @@ def _run_pipeline(
             )
         except RuntimeError as exc:
             if render_quality in {"final", "quality"}:
-                err = "quality_identity_rerender_unavailable" if render_quality == "quality" else "final_identity_rerender_unavailable"
+                err = (
+                    "quality_identity_rerender_unavailable"
+                    if render_quality == "quality"
+                    else "final_identity_rerender_unavailable"
+                )
                 raise QualityPathError(err) from exc
             raise
 
@@ -1071,7 +1092,10 @@ async def process_image(
                         "error": str(probe.get("error", "quality_cloud_worker_unreachable")),
                         "worker_url": quality_worker_url,
                         "probe": probe,
-                        "note": "Final/quality render mode requires a CUDA-capable worker when local GPU is unavailable.",
+                        "note": (
+                            "Final/quality render mode requires a CUDA-capable worker "
+                            "when local GPU is unavailable."
+                        ),
                     },
                 )
             forward_form = {
@@ -1290,7 +1314,11 @@ async def review_home() -> HTMLResponse:
         right_index:parseInt(document.getElementById('right').value||'2',10),
         winner:document.getElementById('winner').value,
       };
-      await fetch('/review/rate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      await fetch('/review/rate',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(payload)
+      });
       alert('saved');
     }
     </script></body></html>
@@ -1300,7 +1328,10 @@ async def review_home() -> HTMLResponse:
 
 @app.get("/review/runs")
 async def review_runs() -> dict:
-    return {"runs": rating_store.list_runs(), "ratings_count": len(rating_store.recent(limit=10000))}
+    return {
+        "runs": rating_store.list_runs(),
+        "ratings_count": len(rating_store.recent(limit=10000)),
+    }
 
 
 @app.get("/review/run/{run_id}")

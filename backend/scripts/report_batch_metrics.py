@@ -3,7 +3,6 @@
 import argparse
 import io
 import json
-import math
 import statistics
 import sys
 from pathlib import Path
@@ -23,7 +22,13 @@ from app.main import app  # noqa: E402
 
 
 def _collect_images(input_dir: Path) -> List[Path]:
-    return sorted([p for p in input_dir.rglob("*") if p.is_file() and p.suffix.lower() in {".png", ".jpg", ".jpeg", ".webp"}])
+    return sorted(
+        [
+            p
+            for p in input_dir.rglob("*")
+            if p.is_file() and p.suffix.lower() in {".png", ".jpg", ".jpeg", ".webp"}
+        ]
+    )
 
 
 def _cosine(a: np.ndarray, b: np.ndarray) -> float:

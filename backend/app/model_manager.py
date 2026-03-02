@@ -131,7 +131,10 @@ class ModelManager:
             "quality_sdxl": self._has_model_files(self.settings.quality_sdxl_model, "quality_sdxl"),
             "controlnet_canny": self._has_model_files(self.settings.controlnet_canny_model, "controlnet_canny"),
             "controlnet_depth": self._has_model_files(self.settings.controlnet_depth_model, "controlnet_depth"),
-            "controlnet_openpose": self._has_model_files(self.settings.controlnet_openpose_model, "controlnet_openpose"),
+            "controlnet_openpose": self._has_model_files(
+                self.settings.controlnet_openpose_model,
+                "controlnet_openpose",
+            ),
             "quality_controlnet_canny": self._has_model_files(
                 self.settings.quality_controlnet_canny_model, "quality_controlnet_canny"
             ),

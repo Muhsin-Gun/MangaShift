@@ -246,7 +246,11 @@ def test_quality_mode_forwards_to_cloud_worker_when_probe_ok(monkeypatch):
             }
 
         async def _fake_forward(**kwargs) -> Response:
-            return Response(content=build_sample_image_bytes(), media_type="image/png", headers={"X-Remote-Worker": "1"})
+            return Response(
+                content=build_sample_image_bytes(),
+                media_type="image/png",
+                headers={"X-Remote-Worker": "1"},
+            )
 
         monkeypatch.setattr("app.main._probe_quality_worker", _fake_probe)
         monkeypatch.setattr("app.main._forward_quality_to_worker", _fake_forward)
@@ -329,7 +333,11 @@ def test_final_mode_forwards_to_cloud_worker_when_probe_ok(monkeypatch):
             }
 
         async def _fake_forward(**kwargs) -> Response:
-            return Response(content=build_sample_image_bytes(), media_type="image/png", headers={"X-Remote-Worker": "1"})
+            return Response(
+                content=build_sample_image_bytes(),
+                media_type="image/png",
+                headers={"X-Remote-Worker": "1"},
+            )
 
         monkeypatch.setattr("app.main._probe_quality_worker", _fake_probe)
         monkeypatch.setattr("app.main._forward_quality_to_worker", _fake_forward)

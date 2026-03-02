@@ -92,11 +92,20 @@ def maybe_ref_bytes(ref_path: Optional[Path]) -> Optional[bytes]:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run old-man panel generation with production controls.")
-    parser.add_argument("--input-image", type=Path, default=DEFAULT_LOCAL_INPUT if DEFAULT_LOCAL_INPUT.exists() else DEFAULT_INPUT)
+    parser.add_argument(
+        "--input-image",
+        type=Path,
+        default=DEFAULT_LOCAL_INPUT if DEFAULT_LOCAL_INPUT.exists() else DEFAULT_INPUT,
+    )
     parser.add_argument("--crop", type=str, default="460,120,1260,1110")
     parser.add_argument("--output-dir", type=Path, default=ROOT / "backend" / "cache" / "oldman_master")
     parser.add_argument("--style", type=str, default="realistic")
-    parser.add_argument("--render-quality", type=str, default="final", choices=["preview", "balanced", "final", "quality"])
+    parser.add_argument(
+        "--render-quality",
+        type=str,
+        default="final",
+        choices=["preview", "balanced", "final", "quality"],
+    )
     parser.add_argument("--shot-type", type=str, default="standing_full_body")
     parser.add_argument("--variant-count", type=int, default=24)
     parser.add_argument("--upscale", type=float, default=1.0)
@@ -147,7 +156,11 @@ def main() -> None:
         style_ref_bytes = style_ref_bytes or crop_bytes
         char_ref_bytes = char_ref_bytes or crop_bytes
 
-    if args.render_quality == "quality" and settings.quality_require_full_path and (style_ref_bytes is None and char_ref_bytes is None):
+    if (
+        args.render_quality == "quality"
+        and settings.quality_require_full_path
+        and (style_ref_bytes is None and char_ref_bytes is None)
+    ):
         raise SystemExit(
             "Quality full-path mode requires style or character reference. "
             "Provide --style-ref/--character-ref or --use-crop-as-refs."

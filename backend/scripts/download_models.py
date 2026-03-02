@@ -64,7 +64,11 @@ MODEL_ALLOW_PATTERNS = {
     "quality_controlnet_depth": ["*.json", "*.bin", "*.safetensors", "*.txt", "*.yaml", "*.md"],
     "quality_controlnet_openpose": ["*.json", "*.bin", "*.safetensors", "*.txt", "*.yaml", "*.md"],
     "ip_adapter_sd15": ["models/ip-adapter_sd15.safetensors", "models/image_encoder/*", "models/*.json"],
-    "ip_adapter_sdxl": ["sdxl_models/ip-adapter_sdxl_vit-h.safetensors", "sdxl_models/image_encoder/*", "sdxl_models/*.json"],
+    "ip_adapter_sdxl": [
+        "sdxl_models/ip-adapter_sdxl_vit-h.safetensors",
+        "sdxl_models/image_encoder/*",
+        "sdxl_models/*.json",
+    ],
     "lama": ["*.json", "*.bin", "*.pth", "*.yaml", "*.txt", "*.md"],
 }
 
@@ -145,7 +149,11 @@ def main() -> None:
     )
     parser.add_argument("--all", action="store_true", help="Download all known models.")
     parser.add_argument("--required", action="store_true", help="Download strict core models only.")
-    parser.add_argument("--quality", action="store_true", help="Download quality/full-path SDXL + ControlNet + IP-Adapter assets.")
+    parser.add_argument(
+        "--quality",
+        action="store_true",
+        help="Download quality/full-path SDXL + ControlNet + IP-Adapter assets.",
+    )
     parser.add_argument("--only", nargs="*", default=[], help=f"Subset keys: {', '.join(MODEL_MAP.keys())}")
     parser.add_argument("--force", action="store_true", help="Redownload even when files already exist.")
     parser.add_argument(

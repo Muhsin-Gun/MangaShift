@@ -23,7 +23,7 @@ class RatingStore:
             return []
         lines = self.ratings_path.read_text(encoding="utf-8").splitlines()
         rows: List[Dict[str, Any]] = []
-        for raw in lines[-max(1, int(limit)) :]:
+        for raw in lines[-max(1, int(limit)):]:
             raw = raw.strip()
             if not raw:
                 continue

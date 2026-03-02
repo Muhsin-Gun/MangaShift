@@ -57,7 +57,7 @@ def _hex_to_rgb(value: str) -> Tuple[int, int, int]:
     value = str(value or "").strip().lstrip("#")
     if len(value) != 6:
         return (128, 128, 128)
-    return tuple(int(value[i : i + 2], 16) for i in (0, 2, 4))
+    return tuple(int(value[i:i + 2], 16) for i in (0, 2, 4))
 
 
 def _sha_seed(raw: bytes, salt: str = "") -> int:
@@ -540,7 +540,16 @@ def _apply_region_color_grade(
         sat_bias=3.0,
     )
     # Keep background mostly neutral: lower saturation without forcing hue.
-    _blend(bg, cloth_hsv, strengths["background"], v_gain=1.0, v_lift=0.0, shift_hue=False, sat_scale=0.18, sat_bias=2.0)
+    _blend(
+        bg,
+        cloth_hsv,
+        strengths["background"],
+        v_gain=1.0,
+        v_lift=0.0,
+        shift_hue=False,
+        sat_scale=0.18,
+        sat_bias=2.0,
+    )
 
     out = cv2.cvtColor(np.clip(hsv, 0, 255).astype(np.uint8), cv2.COLOR_HSV2RGB).astype(np.float32)
     # Anti-cool cast for skin: if skin region skews blue/cyan, nudge to warmer complexion.
@@ -740,8 +749,6 @@ def _control_images(
     }
 
 
-
-
 def _fast_fallback_img2img(
     image: Image.Image,
     *,
@@ -769,9 +776,9 @@ def _fast_fallback_img2img(
         hsv[:, :, 1] = np.clip(hsv[:, :, 1] * (1.0 + 0.18 * chroma), 0, 255)
         out = cv2.cvtColor(hsv.astype(np.uint8), cv2.COLOR_HSV2RGB)
         lab = cv2.cvtColor(out, cv2.COLOR_RGB2LAB).astype(np.float32)
-        l = lab[:, :, 0].astype(np.uint8)
+        luma = lab[:, :, 0].astype(np.uint8)
         clahe = cv2.createCLAHE(clipLimit=float(1.4 + 1.8 * chroma), tileGridSize=(8, 8))
-        lab[:, :, 0] = clahe.apply(l)
+        lab[:, :, 0] = clahe.apply(luma)
         sat_now = float(hsv[:, :, 1].mean())
         if sat_now < 14.0:
             yy = np.indices((lab.shape[0], lab.shape[1]))[0].astype(np.float32) / max(1.0, float(lab.shape[0] - 1))
@@ -1546,7 +1553,9 @@ def render_two_pass_variants(
     top_k = int(np.clip(top_k, 1, max(1, len(ranked))))
     top_selected = ranked[:top_k]
 
-    run_id = hashlib.sha256(image_bytes + style_name.encode("utf-8") + str(time.time()).encode("utf-8")).hexdigest()[:16]
+    run_id = hashlib.sha256(
+        image_bytes + style_name.encode("utf-8") + str(time.time()).encode("utf-8")
+    ).hexdigest()[:16]
     run_dir = model_manager.settings.cache_dir / "variant_runs" / run_id
 
     variant_payload = []
