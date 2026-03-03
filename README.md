@@ -122,26 +122,69 @@ backend\.venv_cuda\Scripts\python.exe backend\scripts\run_oldman_master.py --ren
 
 Cell 1: deterministic environment setup
 ```powershell
-cd backend
-py -3.10 -m venv .venv_cuda
-.\.venv_cuda\Scripts\python.exe -m pip install --upgrade pip setuptools wheel
-.\.venv_cuda\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv_cuda\Scripts\python.exe -m pip install facenet-pytorch --no-deps
-cd ..
+$ErrorActionPreference = "Stop"
+Set-Location "C:\Users\amadn\OneDrive\Desktop\mangashift"
+
+if (-not (Test-Path "backend\.venv_cuda\Scripts\python.exe")) {
+  py -3.10 -m venv backend\.venv_cuda
+}
+$Py = Resolve-Path "backend\.venv_cuda\Scripts\python.exe"
+
+& $Py -m pip install --upgrade pip setuptools wheel
+& $Py -m pip install -r backend\requirements.txt
+& $Py -m pip install facenet-pytorch --no-deps
+& $Py -m pip check
 ```
 
 Cell 2: verify stack + model inventory
 ```powershell
-python backend\scripts\verify_pro_stack.py --json
-python backend\scripts\download_models.py --required
-python backend\scripts\download_models.py --quality
-python backend\scripts\model_manifest.py --write --models-dir backend\models --verify
+$ErrorActionPreference = "Stop"
+Set-Location "C:\Users\amadn\OneDrive\Desktop\mangashift"
+$Py = Resolve-Path "backend\.venv_cuda\Scripts\python.exe"
+
+& $Py backend\scripts\verify_pro_stack.py --json
+& $Py backend\scripts\download_models.py --required
+& $Py backend\scripts\model_manifest.py --write --models-dir backend\models --verify
+
+# Quality model inventory only (non-blocking).
+$qualityKeys = @(
+  "quality_sdxl",
+  "quality_controlnet_canny",
+  "quality_controlnet_depth",
+  "quality_controlnet_openpose",
+  "ip_adapter_sd15",
+  "ip_adapter_sdxl"
+)
+$missing = @()
+foreach ($k in $qualityKeys) {
+  $p = Join-Path "backend\models" $k
+  $hasFiles = (Test-Path $p) -and ((Get-ChildItem $p -Recurse -File -ErrorAction SilentlyContinue | Measure-Object).Count -gt 0)
+  if (-not $hasFiles) {
+    $missing += $k
+  }
+}
+if ($missing.Count -gt 0) {
+  Write-Warning ("Missing quality model folders: " + ($missing -join ", "))
+  Write-Host "When network is stable, run: $Py backend\scripts\download_models.py --quality --fail-fast"
+}
 ```
 
 Cell 3: quality runtime check + smoke
 ```powershell
-curl http://127.0.0.1:8000/quality/readiness
-python backend\scripts\run_strict_smoke.py --strict-diffusion --strict-ocr --strict-translation --quality final --style cinematic --output-dir backend\cache\strict_smoke
+$ErrorActionPreference = "Stop"
+Set-Location "C:\Users\amadn\OneDrive\Desktop\mangashift"
+$Py = Resolve-Path "backend\.venv_cuda\Scripts\python.exe"
+
+& $Py backend\scripts\verify_pro_stack.py --json | Out-File backend\cache\verify_stack_latest.json -Encoding utf8
+$stack = Get-Content backend\cache\verify_stack_latest.json -Raw | ConvertFrom-Json
+
+if ($stack.quality_runtime.quality_mode_ready) {
+  & $Py backend\scripts\run_strict_smoke.py --strict-diffusion --strict-ocr --strict-translation --quality final --style cinematic --output-dir backend\cache\strict_smoke
+} else {
+  Write-Warning "Quality runtime unavailable (no CUDA/worker). Running balanced strict-gate fallback."
+  $fallbackPageIndex = Get-Random -Minimum 200 -Maximum 1000000
+  & $Py backend\scripts\run_oldman_master.py --render-quality balanced --allow-cpu --variant-count 2 --use-crop-as-refs --strict-gate --page-index $fallbackPageIndex
+}
 ```
 
 Cell 4: guarded git push (runs compile + tests + smoke before push)
@@ -153,6 +196,7 @@ Optional:
 .\safe_push.ps1 -Remote origin -Branch main
 .\safe_push.ps1 -SkipSmoke
 .\safe_push.ps1 -NoPush
+.\safe_push.ps1 -PushRetries 8
 ```
 
 ## Notes
