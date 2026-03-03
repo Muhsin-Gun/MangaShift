@@ -160,3 +160,26 @@ Optional:
 - Dependency checks (`pip check`) are run in bootstrap/start scripts as advisory diagnostics.
 - Real-ESRGAN runs only when both package imports and model weights are available.
 - There is no `oldman.py` entrypoint; use `backend/scripts/run_oldman_master.py`
+
+## Git Push Stability (Port 443 SSH)
+
+For more stable git pushes, configure SSH over port 443:
+
+```powershell
+# Test SSH connection
+ssh -T -p 443 git@ssh.github.com
+
+# Set remote to SSH
+git remote set-url origin git@github.com:Muhsin-Gun/MangaShift.git
+
+# Push via SSH (automatically uses port 443 via config)
+git push origin main
+```
+
+SSH config (`~/.ssh/config`):
+```
+Host github.com
+  HostName ssh.github.com
+  Port 443
+  User git
+```
