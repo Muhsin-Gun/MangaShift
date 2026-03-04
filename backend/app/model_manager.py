@@ -11,6 +11,7 @@ from typing import Any, Callable, Dict, Optional
 
 from loguru import logger
 
+from .compat import ensure_torchvision_functional_tensor
 from .config import Settings
 
 
@@ -99,6 +100,8 @@ class ModelManager:
         # transitive dependency mismatches (for example, realesrgan -> basicsr -> torchvision).
         # Probe-import these modules once to prevent false capability positives.
         if available and module_name in {"realesrgan", "facenet_pytorch"}:
+            if module_name == "realesrgan":
+                ensure_torchvision_functional_tensor()
             try:
                 importlib.import_module(module_name)
             except Exception:

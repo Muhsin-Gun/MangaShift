@@ -16,12 +16,17 @@ backend/.venv*/
 .DS_Store
 Thumbs.db
 .vscode/
+.idea/
 
 # Runtime assets
 backend/cache/
 backend/models/
 backend/loras/*.safetensors
 backend/fonts/*.ttf
+output_export/
+
+# Local installers / binaries
+*.msi
 
 # Extension
 extension/node_modules/

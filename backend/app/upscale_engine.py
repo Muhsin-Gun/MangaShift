@@ -8,6 +8,7 @@ import numpy as np
 from loguru import logger
 from PIL import Image, ImageFilter
 
+from .compat import ensure_torchvision_functional_tensor
 from .config import get_settings
 from .utils import pil_to_png_bytes, safe_image_load
 
@@ -25,6 +26,7 @@ def _load_realesrgan_model():
         logger.warning("Real-ESRGAN weights not found: {}", model_path)
         return None
     try:
+        ensure_torchvision_functional_tensor()
         from basicsr.archs.rrdbnet_arch import RRDBNet
         from realesrgan import RealESRGANer
 

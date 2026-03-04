@@ -9,6 +9,60 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
+function Get-GitHubRepoPath {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$RemoteUrl
+    )
+
+    $raw = [string]$RemoteUrl
+    $raw = $raw.Trim()
+    if (-not $raw) {
+        return ""
+    }
+
+    $patterns = @(
+        "^git@github\.com:(.+?)(?:\.git)?$",
+        "^ssh://git@(?:github\.com|ssh\.github\.com)(?::\d+)?/(.+?)(?:\.git)?$",
+        "^https://github\.com/(.+?)(?:\.git)?$"
+    )
+    foreach ($pattern in $patterns) {
+        if ($raw -match $pattern) {
+            return "$($matches[1]).git"
+        }
+    }
+    return ""
+}
+
+function Invoke-GitPushWithRetry {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Target,
+        [Parameter(Mandatory = $true)]
+        [string]$Branch,
+        [Parameter(Mandatory = $true)]
+        [int]$Retries,
+        [Parameter(Mandatory = $true)]
+        [string]$Label
+    )
+
+    $Retries = [Math]::Max(1, [int]$Retries)
+    for ($attempt = 1; $attempt -le $Retries; $attempt++) {
+        Write-Host "[MangaShift] Push attempt $attempt/$Retries via $Label -> $Target/$Branch"
+        git push $Target $Branch
+        if ($LASTEXITCODE -eq 0) {
+            return $true
+        }
+
+        if ($attempt -lt $Retries) {
+            $sleepSeconds = [Math]::Min(60, 5 * $attempt)
+            Write-Warning "[MangaShift] Push failed via $Label. Retrying in $sleepSeconds seconds."
+            Start-Sleep -Seconds $sleepSeconds
+        }
+    }
+    return $false
+}
+
 $RepoRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $RepoRoot
 
@@ -79,25 +133,49 @@ if ($NoPush) {
     exit 0
 }
 
-$PushRetries = [Math]::Max(1, [int]$PushRetries)
-$pushOk = $false
-for ($attempt = 1; $attempt -le $PushRetries; $attempt++) {
-    Write-Host "[MangaShift] Push attempt $attempt/$PushRetries -> $Remote/$Branch"
-    git push $Remote $Branch
-    if ($LASTEXITCODE -eq 0) {
-        $pushOk = $true
-        break
-    }
+$remoteUrl = (git remote get-url $Remote).Trim()
+if (-not $remoteUrl) {
+    throw "Could not resolve remote URL for '$Remote'."
+}
+$repoPath = Get-GitHubRepoPath -RemoteUrl $remoteUrl
 
-    if ($attempt -lt $PushRetries) {
-        $sleepSeconds = [Math]::Min(60, 5 * $attempt)
-        Write-Warning "[MangaShift] Push failed. Retrying in $sleepSeconds seconds."
-        Start-Sleep -Seconds $sleepSeconds
+$targets = @(
+    @{ target = $Remote; label = "remote_name" }
+)
+if ($repoPath) {
+    $ssh443Url = "ssh://git@ssh.github.com:443/$repoPath"
+    $httpsUrl = "https://github.com/$repoPath"
+    if ($ssh443Url -ne $remoteUrl) {
+        $targets += @{ target = $ssh443Url; label = "ssh_443_url" }
+    }
+    if ($httpsUrl -ne $remoteUrl) {
+        $targets += @{ target = $httpsUrl; label = "https_url" }
     }
 }
 
+$seenTargets = @{}
+$pushOk = $false
+foreach ($entry in $targets) {
+    $target = [string]$entry.target
+    if ($seenTargets.ContainsKey($target)) {
+        continue
+    }
+    $seenTargets[$target] = $true
+
+    $ok = Invoke-GitPushWithRetry `
+        -Target $target `
+        -Branch $Branch `
+        -Retries $PushRetries `
+        -Label ([string]$entry.label)
+    if ($ok) {
+        $pushOk = $true
+        break
+    }
+    Write-Warning "[MangaShift] Push path failed for $target. Trying next transport."
+}
+
 if (-not $pushOk) {
-    throw "git push failed after $PushRetries attempts."
+    throw "git push failed for all available transports."
 }
 
 Write-Host "[MangaShift] Push completed."

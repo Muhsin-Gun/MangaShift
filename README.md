@@ -118,12 +118,22 @@ CPU-safe validation run:
 backend\.venv_cuda\Scripts\python.exe backend\scripts\run_oldman_master.py --render-quality balanced --allow-cpu --variant-count 2 --use-crop-as-refs --strict-gate
 ```
 
-## 4 Production Cells (Windows PowerShell)
+## 8 Production Cells (Windows PowerShell)
 
-Cell 1: deterministic environment setup
+Cell 1: workspace + git sanity
 ```powershell
 $ErrorActionPreference = "Stop"
-Set-Location "C:\Users\amadn\OneDrive\Desktop\mangashift"
+$RepoRoot = (Resolve-Path ".").Path
+Set-Location $RepoRoot
+git status -sb
+git remote -v
+```
+
+Cell 2: deterministic environment bootstrap
+```powershell
+$ErrorActionPreference = "Stop"
+$RepoRoot = (Resolve-Path ".").Path
+Set-Location $RepoRoot
 
 if (-not (Test-Path "backend\.venv_cuda\Scripts\python.exe")) {
   py -3.10 -m venv backend\.venv_cuda
@@ -136,17 +146,32 @@ $Py = Resolve-Path "backend\.venv_cuda\Scripts\python.exe"
 & $Py -m pip check
 ```
 
-Cell 2: verify stack + model inventory
+Cell 3: engineering quality gates
 ```powershell
 $ErrorActionPreference = "Stop"
-Set-Location "C:\Users\amadn\OneDrive\Desktop\mangashift"
+$Py = Resolve-Path "backend\.venv_cuda\Scripts\python.exe"
+
+& $Py -m flake8 backend/app backend/scripts tests
+& $Py -m pytest tests -q
+```
+
+Cell 4: strict stack + required model verification
+```powershell
+$ErrorActionPreference = "Stop"
 $Py = Resolve-Path "backend\.venv_cuda\Scripts\python.exe"
 
 & $Py backend\scripts\verify_pro_stack.py --json
 & $Py backend\scripts\download_models.py --required
 & $Py backend\scripts\model_manifest.py --write --models-dir backend\models --verify
+```
 
-# Quality model inventory only (non-blocking).
+Cell 5: CUDA/quality readiness diagnostics
+```powershell
+$ErrorActionPreference = "Stop"
+$Py = Resolve-Path "backend\.venv_cuda\Scripts\python.exe"
+
+& $Py backend\scripts\cuda_diagnose.py --json
+
 $qualityKeys = @(
   "quality_sdxl",
   "quality_controlnet_canny",
@@ -159,20 +184,17 @@ $missing = @()
 foreach ($k in $qualityKeys) {
   $p = Join-Path "backend\models" $k
   $hasFiles = (Test-Path $p) -and ((Get-ChildItem $p -Recurse -File -ErrorAction SilentlyContinue | Measure-Object).Count -gt 0)
-  if (-not $hasFiles) {
-    $missing += $k
-  }
+  if (-not $hasFiles) { $missing += $k }
 }
 if ($missing.Count -gt 0) {
   Write-Warning ("Missing quality model folders: " + ($missing -join ", "))
-  Write-Host "When network is stable, run: $Py backend\scripts\download_models.py --quality --fail-fast"
+  Write-Host "Run when network is stable: $Py backend\scripts\download_models.py --quality --fail-fast"
 }
 ```
 
-Cell 3: quality runtime check + smoke
+Cell 6: runtime smoke gate (quality-first, CPU-safe fallback)
 ```powershell
 $ErrorActionPreference = "Stop"
-Set-Location "C:\Users\amadn\OneDrive\Desktop\mangashift"
 $Py = Resolve-Path "backend\.venv_cuda\Scripts\python.exe"
 
 & $Py backend\scripts\verify_pro_stack.py --json | Out-File backend\cache\verify_stack_latest.json -Encoding utf8
@@ -187,16 +209,64 @@ if ($stack.quality_runtime.quality_mode_ready) {
 }
 ```
 
-Cell 4: guarded git push (runs compile + tests + smoke before push)
+Cell 7: guarded pre-push validation (no push)
 ```powershell
-.\safe_push.ps1
+.\safe_push.ps1 -NoPush -PushRetries 8
 ```
-Optional:
+
+Cell 8: commit + resilient push
 ```powershell
-.\safe_push.ps1 -Remote origin -Branch main
-.\safe_push.ps1 -SkipSmoke
-.\safe_push.ps1 -NoPush
-.\safe_push.ps1 -PushRetries 8
+git add .
+git commit -m "your message"
+.\safe_push.ps1 -SkipSmoke -PushRetries 8
+```
+
+## Colab CUDA Cells (GPU Runtime)
+
+Cell C1: runtime check
+```python
+import os, sys, subprocess
+print("python:", sys.version)
+print("colab gpu:", os.environ.get("COLAB_GPU"))
+subprocess.run(["nvidia-smi"], check=False)
+```
+
+Cell C2: clone and setup
+```bash
+git clone https://github.com/Muhsin-Gun/MangaShift.git
+cd MangaShift
+python -m pip install --upgrade pip setuptools wheel
+pip install -r backend/requirements.txt
+pip install facenet-pytorch --no-deps
+```
+
+Cell C3: CUDA diagnose + stack verify
+```bash
+python backend/scripts/cuda_diagnose.py --json
+python backend/scripts/verify_pro_stack.py --json
+```
+
+Cell C4: models
+```bash
+python backend/scripts/download_models.py --required
+python backend/scripts/download_models.py --quality --fail-fast
+python backend/scripts/model_manifest.py --write --models-dir backend/models --verify
+```
+
+Cell C5: quality smoke
+```bash
+python backend/scripts/run_strict_smoke.py --strict-diffusion --strict-ocr --strict-translation --quality final --style cinematic --output-dir backend/cache/strict_smoke
+```
+
+Cell C6: oldman strict gate
+```bash
+python backend/scripts/run_oldman_master.py --render-quality quality --variant-count 8 --use-crop-as-refs --strict-gate --page-index 555
+```
+
+Cell C7: engineering tests
+```bash
+python -m flake8 backend/app backend/scripts tests
+python -m pytest tests -q
 ```
 
 ## Notes

@@ -8,6 +8,7 @@ import os
 import platform
 import subprocess
 import sys
+import types
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List
@@ -48,6 +49,21 @@ def has_module(module_name: str) -> bool:
     if spec is None:
         return False
     if module_name in {"realesrgan", "facenet_pytorch"}:
+        if module_name == "realesrgan":
+            try:
+                from torchvision.transforms import functional as tv_functional
+
+                shim_name = "torchvision.transforms.functional_tensor"
+                if shim_name not in sys.modules:
+                    shim = types.ModuleType(shim_name)
+                    for attr in dir(tv_functional):
+                        try:
+                            setattr(shim, attr, getattr(tv_functional, attr))
+                        except Exception:
+                            continue
+                    sys.modules[shim_name] = shim
+            except Exception:
+                pass
         try:
             importlib.import_module(module_name)
         except Exception:
