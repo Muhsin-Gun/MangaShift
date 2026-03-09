@@ -211,6 +211,28 @@ def _default_styles() -> List[dict]:
             "priority": "balanced",
         },
         {
+            "id": "manhwa_studio_master",
+            "name": "Manhwa Studio Master",
+            "short_desc": "Pipeline-style studio finish: sketch->lineart->flat->shade->lighting->polish.",
+            "thumbnail": "assets/style_manhwa_studio_master.png",
+            "prompt_template": (
+                "premium korean manhwa panel, construction-aware anatomy, clean inking, "
+                "structured line hierarchy, controlled flat colors, layered cel shading, "
+                "secondary bounce light, focused rim light, cinematic background depth, "
+                "high facial readability, polished studio final"
+            ),
+            "negative_prompt": (
+                f"{base_negative}, extra fingers, deformed hands, inconsistent eyes, "
+                "plastic skin, muddy shading, low-contrast background, overexposed highlights"
+            ),
+            "controlnet_config": {"lineart": 1.15, "depth": 0.55, "openpose": 0.42},
+            "img2img_params": {"strength": 0.58, "steps": 34, "guidance_scale": 8.8},
+            "palette_anchor": ["#efc6ad", "#343f4f", "#f0dfc9", "#9aa9bf"],
+            "post_filters": {"contrast": 0.15, "saturation": 0.08, "sharpness": 0.14, "grain": 0.03},
+            "preserve_line": True,
+            "priority": "quality",
+        },
+        {
             "id": "shonen_action",
             "name": "Shonen Action",
             "short_desc": "Bold action shading and high-contrast impact.",

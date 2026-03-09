@@ -227,8 +227,11 @@ Cell C1: runtime check
 ```python
 import os, sys, subprocess
 print("python:", sys.version)
-print("colab gpu:", os.environ.get("COLAB_GPU"))
-subprocess.run(["nvidia-smi"], check=False)
+print("COLAB_GPU:", os.environ.get("COLAB_GPU"))
+print("COLAB_RELEASE_TAG:", os.environ.get("COLAB_RELEASE_TAG"))
+rc = subprocess.run(["nvidia-smi"], check=False).returncode
+if rc != 0:
+    raise SystemExit("GPU runtime not active. In Colab: Runtime -> Change runtime type -> GPU, then restart.")
 ```
 
 Cell C2: clone and setup
@@ -238,32 +241,51 @@ cd MangaShift
 python -m pip install --upgrade pip setuptools wheel
 pip install -r backend/requirements.txt
 pip install facenet-pytorch --no-deps
+pip install flake8
 ```
 
-Cell C3: CUDA diagnose + stack verify
+Cell C3: optional accelerator modules (best effort, non-fatal)
+```python
+import subprocess, sys
+
+def run(cmd):
+    print(">", " ".join(cmd))
+    proc = subprocess.run(cmd, check=False)
+    print("exit:", proc.returncode)
+    return proc.returncode
+
+# xformers: optional speed/memory optimization for CUDA attention
+run([sys.executable, "-m", "pip", "install", "xformers"])
+
+# lama_cleaner intentionally remains optional in this environment.
+# It has dependency constraints that can conflict with this SDXL runtime.
+print("lama_cleaner is optional and recommended only in an isolated env/service.")
+```
+
+Cell C4: CUDA diagnose + stack verify
 ```bash
 python backend/scripts/cuda_diagnose.py --json
 python backend/scripts/verify_pro_stack.py --json
 ```
 
-Cell C4: models
+Cell C5: models
 ```bash
 python backend/scripts/download_models.py --required
 python backend/scripts/download_models.py --quality --fail-fast
 python backend/scripts/model_manifest.py --write --models-dir backend/models --verify
 ```
 
-Cell C5: quality smoke
+Cell C6: strict quality smoke
 ```bash
 python backend/scripts/run_strict_smoke.py --strict-diffusion --strict-ocr --strict-translation --quality final --style cinematic --output-dir backend/cache/strict_smoke
 ```
 
-Cell C6: oldman strict gate
+Cell C7: oldman strict gate
 ```bash
-python backend/scripts/run_oldman_master.py --render-quality quality --variant-count 8 --use-crop-as-refs --strict-gate --page-index 555
+python backend/scripts/run_oldman_master.py --style manhwa_studio_master --render-quality quality --variant-count 8 --use-crop-as-refs --strict-gate --page-index 555
 ```
 
-Cell C7: engineering tests
+Cell C8: engineering quality gates
 ```bash
 python -m flake8 backend/app backend/scripts tests
 python -m pytest tests -q
